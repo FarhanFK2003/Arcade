@@ -14,12 +14,26 @@ namespace Arcade.Controllers {
             return View();
         }
 
+        [HttpGet]
         public IActionResult Login() {
             return View();
         }
+        [HttpPost]
+        public IActionResult Login(string Email, string Password) {
+            CustomerRepository cr = new CustomerRepository();
+            if(cr.SearchCustomer(Email, Password))
+                return View("Index");
+            return View();
+        }
+        [HttpGet]
         public IActionResult Signup() {
             return View();
         }
-
+        [HttpPost]
+        public IActionResult Signup(string Email, string Password, string Dob) {
+            CustomerRepository cr = new CustomerRepository();
+            cr.AddCustomer(new Customer(Email, Password, Dob));
+            return View("Index");
+        }
     }
 }

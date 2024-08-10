@@ -20,18 +20,20 @@
                             <div class="card-body p-5">
                                 <h2 class="text-uppercase text-center mb-3 fs-md-1 fs-sm-2 fs-1 text-center text-white fw-bold" style="text-shadow: 8px 8px 10px rgb(0,0,0);" ">ARCADE <img src="../images/g.png" alt="" class="img-fluid" style="margin-left: -2%; width: 2em;"></h2>
                                 <img src="../images/u.png" alt="" class="img-fluid mb-4 offset-5">
-                                <form>
+                                <form method="post" action="/Home/Login">
 
                                     <div data-mdb-input-init class="form-outline mb-4">
-                                        <input type="text" id="form3Example1cg" class="form-control form-control-lg" placeholder="EMAIL" style="border-radius: 20px" />
+                                        <lable for="Email"></lable>
+                                        <input type="text" id="form3Example1cg" class="form-control form-control-lg" placeholder="EMAIL" style="border-radius: 20px" name="Email"/>
                                     </div>
 
                                     <div data-mdb-input-init class="form-outline mb-4">
-                                        <input type="password" id="form3Example4cg" class="form-control form-control-lg" placeholder="Password" style="border-radius: 20px" />
+                                        <lable for="Password"></lable>
+                                        <input type="password" id="form3Example4cg" class="form-control form-control-lg" placeholder="Password" style="border-radius: 20px" name="Password"/>
                                     </div>
 
                                     <div class="d-flex justify-content-center">
-                                        <button type="button" data-mdb-button-init
+                                        <button type="submit" data-mdb-button-init
                                                 data-mdb-ripple-init class="btn btn-success btn-block btn-lg mt-3 gradient-custom-4 px-4 py-2 fs-md-1 fs-sm-2 fs-1  text-white fw-bold"
                                                 style="border-radius: 100px; border:none;">
                                             Confirm
