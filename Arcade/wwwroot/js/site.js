@@ -1,4 +1,29 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿
 
-// Write your JavaScript code.
+const validateEmailStructure = (email) => {
+    return String(email)
+        .toLowerCase()
+        .match(
+            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        );
+};
+
+const emailInputs = document.getElementsByClassName('emailInput');
+const submitButton = document.querySelector('button[type="submit"]');
+
+function updateButtonState() {
+    let allValid = true;
+    Array.from(emailInputs).forEach(emailInput => {
+        const isValid = validateEmailStructure(emailInput.value);
+        if (!isValid) { 
+            allValid = false;
+        }
+    });
+    submitButton.disabled = !allValid;
+}
+
+submitButton.disabled = true;
+
+Array.from(emailInputs).forEach(emailInput => {
+    emailInput.addEventListener('input', updateButtonState);
+});

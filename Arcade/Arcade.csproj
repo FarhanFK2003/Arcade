@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Shared\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="wwwroot\images\cod.jpg" />
     <None Include="wwwroot\images\g.png" />
     <None Include="wwwroot\images\u.png" />

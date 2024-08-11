@@ -1,0 +1,21 @@
+﻿.gradient - custom - 3 {
+    background: #d8ecdf;
+}
+.gradient - custom - 4 {
+    background: #442107;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; 
+}
+
+.alert {
+    margin-bottom: 1rem;
+}
+
+
+.card-body {
+    flex-grow: 1;
+}
