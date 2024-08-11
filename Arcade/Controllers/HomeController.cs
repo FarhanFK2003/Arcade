@@ -11,5 +11,20 @@ namespace Arcade.Controllers {
         public IActionResult Search(string query = null) {
             return View();
         }
-    }
+
+        [HttpGet]
+		public IActionResult Details(string query = null) {
+			return View();
+		}
+
+		[HttpGet]
+		public IActionResult End(string query = null) {
+			return View();
+		}
+
+		[HttpGet]
+		public IActionResult Checkout(string query = null) {
+			return View();
+		}
+	}
 }
