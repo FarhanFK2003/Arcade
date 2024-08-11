@@ -41,15 +41,15 @@ namespace Arcade.Controllers {
             return View();
         }
         [HttpPost]
-        public IActionResult Signup(string Email, string Password, string Dob) {
+        public IActionResult Signup(string Email_, string Password_, string Dob_) {
             CustomerRepository cr = new CustomerRepository();
-            if(cr.AddCustomer(new Customer(Email, Password, Dob))) {
+            if(cr.AddCustomer(new Customer { Email=Email_, Password=Password_, Dob=Dob_})) {
                 var cookieOptions = new CookieOptions {
                     Expires = DateTimeOffset.Now.AddDays(7),
                     HttpOnly = true,
                     Secure = true 
                 };
-                Response.Cookies.Append("UserEmail", Email, cookieOptions);
+                Response.Cookies.Append("UserEmail", Email_, cookieOptions);
                 return RedirectToAction("Index", "Home");
             }
 			ViewBag.ErrorMessage = "Invalid email";

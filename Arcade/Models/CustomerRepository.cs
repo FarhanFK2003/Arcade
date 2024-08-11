@@ -2,10 +2,12 @@
 using System.Data.SqlClient;
 using System.Diagnostics.Eventing.Reader;
 namespace Arcade.Models {
-    public class CustomerRepository {
-        public string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=ArcadeDB;Integrated Security=True;";
-        
-        public CustomerRepository() { }
+    public class CustomerRepository : ICustomerRepository {
+        private string connectionString;
+
+        public CustomerRepository() {
+            connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=ArcadeDB;Integrated Security=True;";
+        }
 
         public bool searchEmail(Customer customer) {
             string query = "Select * from Customer where email = @e";
