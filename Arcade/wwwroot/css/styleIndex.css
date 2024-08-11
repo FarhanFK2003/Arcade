@@ -1,9 +1,8 @@
-/* Custom CSS for background image */
 body {
     background-image: url('../images/cod.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    height: 100vh; /* Full height of the viewport */
+    height: 100vh; 
     margin: 0;
 }

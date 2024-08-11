@@ -21,7 +21,11 @@
                                 <h2 class="text-uppercase text-center mb-3 fs-md-1 fs-sm-2 fs-1 text-center text-white fw-bold" style="text-shadow: 8px 8px 10px rgb(0,0,0);" ">ARCADE <img src="../images/g.png" alt="" class="img-fluid" style="margin-left: -2%; width: 2em;"></h2>
                                 <img src="../images/u.png" alt="" class="img-fluid mb-4 offset-5">
                                 <form method="post" action="/Account/Signup">
-
+                                    @if (ViewBag.ErrorMessage != null) {
+                                        <div class="alert alert-danger">
+                                            @ViewBag.ErrorMessage
+                                        </div>
+                                    }
                                     <div data-mdb-input-init class="form-outline mb-4">
                                         <lable for="Email"></lable>
                                         <input type="email" id="form3Example1cg" class="form-control form-control-lg emailInput" placeholder="EMAIL" style="border-radius: 20px" name="Email" />
@@ -29,11 +33,11 @@
 
                                     <div data-mdb-input-init class="form-outline mb-4">
                                         <lable for="Password"></lable>
-                                        <input type="password" id="form3Example4cg" class="form-control form-control-lg" placeholder="Password" style="border-radius: 20px" name="Password"/>
+                                        <input type="password" class="form-control form-control-lg" placeholder="Password" style="border-radius: 20px" name="Password"/>
                                     </div>
                                     <div data-mdb-input-init class="form-outline mb-4">
                                         <lable for="Dob"></lable>
-                                        <input type="text" id="form3Example4cdg" class="form-control form-control-lg" placeholder="Date Of Birth" style="border-radius: 20px" name="Dob"/>
+                                        <input type="text" class="form-control form-control-lg" placeholder="Date Of Birth" style="border-radius: 20px" name="Dob"/>
                                     </div>
                                     <div class="d-flex justify-content-center">
                                         <button type="submit" data-mdb-button-init
@@ -53,6 +57,6 @@
     </section>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <script src="/js/site.js"></script>
+    <script src="/js/login.js"></script>
 </body>
 </html>

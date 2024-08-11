@@ -21,8 +21,15 @@
 			<img src="/images/Group 119.png" alt="" class="img-fluid" style="margin-left: 43%;width: 6em;">
 			<br>
 			<br>
-			<button class="btn btn-success fs-md-2 fs-sm-5 fs-2 bt-block px-3" style="margin-left: 40%;border-radius: 100px; background-color: #300420;">Proceed</button>
-		</div>
+			<form action="/Checkout" method="get">
+				@* <input type="hidden" name="gameName" value="@Model.GameName" /> *@
+				<button type="submit" class="btn btn-success fs-md-2 fs-sm-5 fs-2 bt-block px-3"
+						style="margin-left: 40%; border-radius: 100px; background-color: #300420;">
+					Proceed
+				</button>
+			</form>
+		@* 	<button class="btn btn-success fs-md-2 fs-sm-5 fs-2 bt-block px-3" style="margin-left: 40%;border-radius: 100px; background-color: #300420;">Proceed</button>
+		 *@</div>
 	</div>
 </div>
 <hr style="height: 20px;background-color: white;">

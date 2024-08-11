@@ -38,9 +38,9 @@ namespace Arcade.Models {
             return false;
         }
 
-        public void AddCustomer(Customer customer) {
+        public bool AddCustomer(Customer customer) {
             if (searchEmail(customer))
-                return;
+                return false;
             string query = "Insert into Customer Values(@e, @p, @d)";
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();
@@ -52,6 +52,7 @@ namespace Arcade.Models {
             cmd.ExecuteNonQuery();
 
             con.Close();
+            return true;
         }
     }
 }

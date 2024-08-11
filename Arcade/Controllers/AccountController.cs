@@ -11,6 +11,9 @@ namespace Arcade.Controllers {
         }
 
         public IActionResult Index() {
+            var email = Request.Cookies["UserEmail"];
+            if(email != null)
+                return RedirectToAction("Index", "Home");
             return View();
         }
 
@@ -21,8 +24,15 @@ namespace Arcade.Controllers {
         [HttpPost]
         public IActionResult Login(string Email, string Password) {
 			CustomerRepository cr = new CustomerRepository();
-			if (cr.SearchCustomer(Email, Password)) 
-				return RedirectToAction("Index", "Home");
+			if (cr.SearchCustomer(Email, Password)) {
+                var cookieOptions = new CookieOptions {
+                    Expires = DateTimeOffset.Now.AddDays(7),
+                    HttpOnly = true,
+                    Secure = true
+                };
+                Response.Cookies.Append("UserEmail", Email, cookieOptions);
+                return RedirectToAction("Index", "Home");
+            } 
 			ViewBag.ErrorMessage = "Invalid email or password.";
 			return View();
 		}
@@ -33,8 +43,17 @@ namespace Arcade.Controllers {
         [HttpPost]
         public IActionResult Signup(string Email, string Password, string Dob) {
             CustomerRepository cr = new CustomerRepository();
-            cr.AddCustomer(new Customer(Email, Password, Dob));
-            return View("Index");
-        }
+            if(cr.AddCustomer(new Customer(Email, Password, Dob))) {
+                var cookieOptions = new CookieOptions {
+                    Expires = DateTimeOffset.Now.AddDays(7),
+                    HttpOnly = true,
+                    Secure = true 
+                };
+                Response.Cookies.Append("UserEmail", Email, cookieOptions);
+                return RedirectToAction("Index", "Home");
+            }
+			ViewBag.ErrorMessage = "Invalid email";
+			return View();
+		}
     }
 }

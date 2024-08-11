@@ -13,17 +13,7 @@ namespace Arcade.Controllers {
         }
 
         [HttpGet]
-		public IActionResult Details(string query = null) {
-			return View();
-		}
-
-		[HttpGet]
-		public IActionResult End(string query = null) {
-			return View();
-		}
-
-		[HttpGet]
-		public IActionResult Checkout(string query = null) {
+		public IActionResult Details(string gameName = null) {
 			return View();
 		}
 	}
