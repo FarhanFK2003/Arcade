@@ -25,11 +25,7 @@ namespace Arcade.Controllers {
         public IActionResult Login(string Email, string Password) {
 			CustomerRepository cr = new CustomerRepository();
 			if (cr.SearchCustomer(Email, Password)) {
-                var cookieOptions = new CookieOptions {
-                    Expires = DateTimeOffset.Now.AddDays(7),
-                    HttpOnly = true,
-                    Secure = true
-                };
+                var cookieOptions = new CookieOptions {Expires = DateTimeOffset.Now.AddDays(7)};
                 Response.Cookies.Append("UserEmail", Email, cookieOptions);
                 return RedirectToAction("Index", "Home");
             } 
@@ -41,15 +37,11 @@ namespace Arcade.Controllers {
             return View();
         }
         [HttpPost]
-        public IActionResult Signup(string Email_, string Password_, string Dob_) {
+        public IActionResult Signup(string Email, string Password, string Dob) {
             CustomerRepository cr = new CustomerRepository();
-            if(cr.AddCustomer(new Customer { Email=Email_, Password=Password_, Dob=Dob_})) {
-                var cookieOptions = new CookieOptions {
-                    Expires = DateTimeOffset.Now.AddDays(7),
-                    HttpOnly = true,
-                    Secure = true 
-                };
-                Response.Cookies.Append("UserEmail", Email_, cookieOptions);
+            if(cr.AddCustomer(new Customer { Email=Email, Password=Password, Dob=Dob})) {
+                var cookieOptions = new CookieOptions {Expires = DateTimeOffset.Now.AddDays(7)};
+                Response.Cookies.Append("UserEmail", Email, cookieOptions);
                 return RedirectToAction("Index", "Home");
             }
 			ViewBag.ErrorMessage = "Invalid email";

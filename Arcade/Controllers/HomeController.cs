@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Arcade.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Arcade.Controllers {
     public class HomeController : Controller {
         [HttpGet]
         public IActionResult Index() {
-            return View();
+            GameRepository gameRepository = new GameRepository();
+            List<Game> games = gameRepository.GetAllGames();
+            return View(games);
         }
 
         [HttpGet]

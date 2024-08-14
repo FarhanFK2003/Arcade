@@ -7,5 +7,7 @@
         void Delete(Game game);
 
         Game GetGameById(int id);
+
+        List<Game> GetAllGames();
     }
 }
