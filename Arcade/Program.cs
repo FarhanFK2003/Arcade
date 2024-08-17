@@ -1,3 +1,6 @@
+using Arcade.Models.Interfaces;
+using Arcade.Models;
+using Arcade.Models.Repositories;
 namespace Arcade {
     public class Program {
         public static void Main(string[] args) {
@@ -6,7 +9,11 @@ namespace Arcade {
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
-            var app = builder.Build();
+            builder.Services.AddSingleton<IRepository<Game>, GameRepository>();
+            builder.Services.AddSingleton<IRepository<Customer>, CustomerRepository>();
+			builder.Services.AddSingleton<IRepository<Review>, ReviewRepository>();
+
+			var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment()) {

@@ -33,3 +33,58 @@
         max-height: 230px !important;
     }
 }
+
+
+.gameA {
+    text-decoration: none;
+    display: inline-block;
+    width: auto;
+    padding: 0;
+    margin: 0;
+}
+
+.detailsCont{
+    width: 100% !important;
+}
+
+
+.reviewCards {
+    max-width: 80% !important;
+    min-width: 80% !important;
+    max-height: 100% !important;
+    min-height: 100% !important;
+    border-radius: 0px;
+    background-color: #a28e94 !important;
+}
+
+.checkoutButtonDetails {
+    margin-left: 0%;
+}
+
+
+@media (min-width: 576px) {
+    .checkoutButtonDetails {
+        margin-left: 2%;
+    }
+}
+
+
+@media (min-width: 768px) {
+    .checkoutButtonDetails {
+        margin-left: 5%;
+    }
+}
+
+
+@media (min-width: 992px) {
+    .checkoutButtonDetails {
+        margin-left: 10%;
+    }
+}
+
+
+@media (min-width: 1200px) {
+    .checkoutButtonDetails {
+        margin-left: 20%;
+    }
+}

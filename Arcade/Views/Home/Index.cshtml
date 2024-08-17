@@ -12,25 +12,34 @@
 }
 
 <div class="container-md mt-md-5 mt-3 mb-md-5 mb-3">
-    @while(i < Model.Count) {
+    @while (i < Model.Count) {
         curr = Model[i].Genre;
         <div class="container-md mt-md-5 mt-3 ml-md-2 ml-md-3">
-            <div class="d-flex overflow-auto " style="white-space: nowrap;">
-                @while(i < Model.Count && curr == Model[i].Genre){
-                    <div class="card me-3 gameCards">
-                        @* <a href="/Home/Details?name=@Model[i].Name" style="text-decoration: none; color: inherit;"> *@
-                        <img src="@Model[i].ImgPath" class="card-img-top img-fluid" alt="..." style="height: 70%; object-fit: cover;">
-                        <div class="card-body">
-                            <p class="card-title text-truncate fs-md-3 fs-4">
-                                @Model[i].Name
-                            </p>
+            <div class="row mb-3">
+                <div class="col">
+                    <h1 class="text-white">
+                        @Model[i].Genre Games:
+                    </h1>
+                </div>
+            </div>
+            <div class="d-flex overflow-auto" style="white-space: nowrap;">
+                @while (i < Model.Count && curr == Model[i].Genre) {
+                    <a href="/Home/Details?id=@Model[i].Id" class="gameA"style="text-decoration: none; display:inline-block;">
+                        <div class="card me-3 gameCards">
+                            <img src="@Model[i].ImgPath" class="card-img-top img-fluid" alt="..." style="height: 70%; object-fit: cover;">
+                            <div class="card-body">
+                                <p class="card-title text-truncate fs-md-3 fs-4">
+                                    @Model[i].Name
+                                </p>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                     ++i;
                 }
             </div>
         </div>
     }
 </div>
+
 
 
