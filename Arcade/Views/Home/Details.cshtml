@@ -24,10 +24,11 @@
 			<p class="fs-md-1 fs-5 text-white text-wrap checkoutButtonDetails"><b>Price: @Model.game.Price</b></p>
 			<br>
 			<br>
-			<form action="/Checkout" method="get">
+			<form action="/Home/Index" method="post">
+				<input type="hidden" name="gameId" value="@Model.game.Id" />
 				<button type="submit" class="btn btn-success fs-md-2 fs-sm-5 fs-2 bt-block px-3 checkoutButtonDetails"
 						style="border-radius: 100px; background-color: #300420;">
-					Proceed
+					Add to Cart
 				</button>
 			</form>
 		</div>

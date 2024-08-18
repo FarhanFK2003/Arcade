@@ -6,12 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace Arcade.Controllers {
     public class HomeController : Controller {
         private readonly IRepository<Game> _gameRepository;
-		private readonly IRepository<Game> _customerRepository;
-		private readonly IRepository<Game> _reviewRepository;
-		IRepository<Game> gameRepository = new GenericRepository<Game>(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=ArcadeDB;");
-		IRepository<Customer> customerRepository = new GenericRepository<Customer>(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=ArcadeDB;");
-		IRepository<Review> reviewRepository = new GenericRepository<Review>(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=ArcadeDB;");
-		public HomeController(IRepository<Game> gameRepository, IRepository<Game> customerRepository, IRepository<Game> reviewRepository) {
+		private readonly IRepository<Customer> _customerRepository;
+		private readonly IRepository<Review> _reviewRepository;
+
+		public HomeController(IRepository<Game> gameRepository, IRepository<Customer> customerRepository, IRepository<Review> reviewRepository) {
             _gameRepository = gameRepository;
 			_customerRepository = customerRepository;
 			_reviewRepository = reviewRepository;
@@ -19,12 +17,30 @@ namespace Arcade.Controllers {
 
         [HttpGet]
         public IActionResult Index() {
-            List<Game> games = gameRepository.GetAll().ToList();
+            List<Game> games = _gameRepository.GetAll().ToList();
             games = games.OrderBy(g => g.Genre).ToList();
             return View(games);
         }
 
-        [HttpGet]
+		[HttpPost]
+		public IActionResult Index(int gameId) {
+			List<string> cart = new List<string>();
+			string currentCart = Request.Cookies["UserCart"];
+			if (!string.IsNullOrEmpty(currentCart))
+				cart = currentCart.Split(',').ToList();
+			if (!cart.Contains(gameId.ToString()))
+				cart.Add(gameId.ToString());
+			string updatedCart = string.Join(',', cart);
+
+			var cookieOptions = new CookieOptions { Expires = DateTimeOffset.Now.AddDays(7) };
+			Response.Cookies.Append("UserCart", updatedCart, cookieOptions);
+
+			List<Game> games = _gameRepository.GetAll().ToList();
+			games = games.OrderBy(g => g.Genre).ToList();
+			return View(games);
+		}
+
+		[HttpGet]
         public IActionResult Search(string query = null) {
             return View();
         }
@@ -32,14 +48,14 @@ namespace Arcade.Controllers {
         [HttpGet]
         public IActionResult Details(int id) {
             GameReviews reviews = new GameReviews();
-            Game game = gameRepository.GetById(id);
-            List<Review> reviewsList = reviewRepository.GetAll().ToList();
+            Game game = _gameRepository.GetById(id);
+            List<Review> reviewsList = _reviewRepository.GetAll().ToList();
             reviews.game = game;
             
             for(int i = 0; i < reviewsList.Count; ++i) {
                 if (reviewsList[i].GameId == id) {
                     reviews.reviews.Add(reviewsList[i]);
-                    reviews.customers.Add(customerRepository.GetById(reviewsList[i].CustomerId));
+                    reviews.customers.Add(_customerRepository.GetById(reviewsList[i].CustomerId));
                 }
             }
 			reviews.customerId = int.Parse(Request.Cookies["userId"]);
@@ -52,16 +68,16 @@ namespace Arcade.Controllers {
                 strTitle = "";
             if (strReview == null)
                 strReview = "";
-            reviewRepository.Add(new Review { Id = -1, CustomerId = customerId, GameId = id, ReviewText = strReview, Rating = rating, Title=strTitle });
+            _reviewRepository.Add(new Review { Id = -1, CustomerId = customerId, GameId = id, ReviewText = strReview, Rating = rating, Title=strTitle });
 			GameReviews reviews = new GameReviews();
-			Game game = gameRepository.GetById(id);
-			List<Review> reviewsList = reviewRepository.GetAll().ToList();
+			Game game = _gameRepository.GetById(id);
+			List<Review> reviewsList = _reviewRepository.GetAll().ToList();
 			reviews.game = game;
 
 			for (int i = 0; i < reviewsList.Count; ++i) {
 				if (reviewsList[i].GameId == id) {
 					reviews.reviews.Add(reviewsList[i]);
-					reviews.customers.Add(customerRepository.GetById(reviewsList[i].CustomerId));
+					reviews.customers.Add(_customerRepository.GetById(reviewsList[i].CustomerId));
 				}
 			}
 			reviews.customerId = int.Parse(Request.Cookies["userId"]);

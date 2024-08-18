@@ -8,10 +8,11 @@ namespace Arcade {
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=ArcadeDB;";
 
-            builder.Services.AddSingleton<IRepository<Game>, GameRepository>();
-            builder.Services.AddSingleton<IRepository<Customer>, CustomerRepository>();
-			builder.Services.AddSingleton<IRepository<Review>, ReviewRepository>();
+			builder.Services.AddSingleton<IRepository<Game>>(sp => new GenericRepository<Game>(connectionString));
+			builder.Services.AddSingleton<IRepository<Customer>>(sp => new GenericRepository<Customer>(connectionString));
+			builder.Services.AddSingleton<IRepository<Review>>(sp => new GenericRepository<Review>(connectionString));
 
 			var app = builder.Build();
 

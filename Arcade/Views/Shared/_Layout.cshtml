@@ -42,16 +42,25 @@
             <div class="col">
                 <img src="/images/cart.png" alt="" class="img-fluid" style="margin-left: -2%; width: 2em;">
             </div>
-            <div class="col">
-                <img src="/images/u.png" alt="" class="img-fluid" style="margin-left: -2%; width: 2em;">
+            <div class="dropdown col">
+                <button class="btn btn-link dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="/images/u2.png" alt="Dropdown Button" class="img-fluid" style="width: 2em;">
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <li>
+                        <form action="/Account/Logout" method="post" class="m-0">
+                            <button type="submit" class="dropdown-item">Log Out</button>
+                        </form>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
 
         @RenderBody()
 
-    <div class="container-fluid text-center">
-        <div class="row" style="background-color: #300420;min-height:100px">
+    <div class="container-fluid text-center" style="width:100% !important; height:auto;">
+        <div class="row" style="background-color: #300420;width:100%; height:auto;">
             <div class="col-3 align-self-center" style="color: white;">
                 ARCADE <img src="/images/g.png" alt="" class="img-fluid" style="margin-left: -2%; width: 2em;">
                 <br>
@@ -66,7 +75,7 @@
             <div class="col-3 align-self-center" style="color: white;">
                 TERMS
             </div>
-            <div class="col-3 align-self-center" style="color: white;">
+            <div class="col-3 align-self-center text-wrap" style="color: white;">
                 CONTACT US
                 <br>
                 arcade@gmail.com
