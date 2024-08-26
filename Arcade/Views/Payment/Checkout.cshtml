@@ -1,56 +1,109 @@
 ﻿@{
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<link rel="stylesheet" href="/css/styleLayout.css">
+<link rel="stylesheet" href="/css/styleCheckout.css"><link rel="stylesheet" href="/css/styleLayout.css">
 
-<div class="container-fluid">
-	<div class="row" style="background-color: #0B0316; min-height:500px">
-		<div class = "col-12">
-			<p class="fs-1 text-white"><b>Checkout</b></p>
-		</div>
-		<div class = "col-2">
-			<img src="/images/image 34.png" alt="" class="img-fluid mx-auto" style="width: 75%; height: auto;">
-			<br>
-		</div>
-		<div class = "col-10">
-			<p class="fs-3 fs-md-3 fs-sm-4 text-white"><b>CALL OF DUTY: MODERN WARFARE 2</b></p>
-			<br>
-			<p class="fs-6 fs-md-6 fs-sm-4 text-white">Call of Duty: Modern Warfare II is a 2022 first-person shooter game developed by Infinity Ward and published by Activision. It is the nineteenth installment of the Call of Duty series, serving as a sequel to the 2019 reboot of the Modern Warfare sub-series. </p>
-			<img src="/images/Group 119.png" alt="" class="img-fluid" style="width: 6em;">
-			<button class="btn btn-success fs-md-2 fs-sm-5 fs-2 bt-block px-3" style="margin-left: 50px;border-radius: 100px; background-color: #300420;">Remove</button>
-			<img src="/images/bin.png" alt="" class="img-fluid mx-auto" style="width: 2%; height: auto;">
-			<br>
-			<br>
-			<br>
-			<br>
-			<p class="fs-2 text-black" style="background-color: white; border-radius: 10px;"><b>TOTAL: $30</b></p>
-
-		</div>
-	</div>
+<div class="container-md mt-md-5 mt-3 ml-md-5 ml-md-5" id="gameCartView">
+    
 </div>
 
-<hr style="height: 20px;background-color: white;">
-<div class="container-fluid" style="align-items: center;">
-	<div class="row" style="background-color: #0B0316; min-height:500px;">
-		<div class="col-12">
-			<p class="fs-1 text-white"><b>Please Fill out the Details</b></p>
-			<div data-mdb-input-init class="form-outline mt-1 mb-2">
-				<input type="text" id="nameCheckout" class="form-control form-control-md" placeholder="Name" style="border-radius: 10px"/>
-			</div>
-			<br>
-			<div data-mdb-input-init class="form-outline mt-1 mb-2">
-				<input type="text" id="emailCheckout" class="form-control form-control-md" placeholder="Email" style="border-radius: 10px"/>
-			</div>
-			<br>
-			<div data-mdb-input-init class="form-outline mt-1 mb-2">
-				<input type="text" id="passCheckout" class="form-control form-control-md" placeholder="Password" style="border-radius: 10px"/>
-			</div>
-			<br>
-			<div data-mdb-input-init class="form-outline mt-1 mb-2">
-				<input type="text" id="ccCheckout" class="form-control form-control-md" placeholder="Credit Card Number" style="border-radius: 10px"/>
-			</div>
-			<br>
-			<img src="/images/image 48.png" alt="" class="img-fluid mx-auto" style="margin-left: 50px;width: 12%; height: auto;">
-			<button class="btn btn-success fs-md-2 fs-sm-5 fs-2 bt-block px-3" style="margin-left: 100px;border-radius: 100px; background-color: #300420;">Confirm</button>
-		</div>
-	</div>
-</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+	function displayCart(){
+        $.ajax({
+            url: '/Payment/GetCart',
+            type: 'GET',
+            success: function(cart){
+                var cartView = $('#gameCartView');
+                cartView.empty();
+                var total = 0;
+                if (cart.length === 0) {
+                    cartView.append('<h1 class="text-white">Your Cart is empty.</h1>');
+                }
+                else {
+                    var cartContent = '<div class="row d-flex justify-content-around" style="">';
+                    for (var i = 0; i < cart.length; ++i){
+                        cartContent +=
+                            '<div class="col-5 mt-md-5 mt-3 ml-md-2 ml-md-3">' +
+                            '<div class="card me-3 cartGames">' +
+                            '<img src="' + cart[i].imgPath + '" alt="Card image cap" class="card-img-top img-fluid" alt="..." style="height: 70%; object-fit: cover;">' +
+                            '<div class="card-body">' +
+                            '<div class="card-title">' + cart[i].name + '</div>' +
+                            '<div class="d-flex justify-content-between align-items-center">' +
+                            '<p>Price: $' + cart[i].price + '</p>' +
+                            '<button type="button" class="btn btn-sm btn-danger my-1" data-id="' + cart[i].id + '"onclick="removeFromCart(this)"> Remove </button>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>';
+                        total += cart[i].price;
+                    }
+                    total = total.toFixed(2);
+                    cartContent += '</div>';
+                    cartContent += `
+                        <hr style="height: 20px;background-color: white;">
+
+                        <div class="accordion" id="accordionPanelsStayOpenExample">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                                    <button class="accordion-button d-flex justify-content-center text-white" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne"
+                                            aria-expanded="true" aria-controls="panelsStayOpen-collapseOne" style="background-color: #0B0316 !important;">
+                                        Checkout
+                                    </button>
+                                </h2>
+                                <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
+                                    <div class="accordion-body">
+                                        <div class="container" style="height: auto; width:100%;">
+
+                                            <form class="needs-validation" novalidate>
+                                                <div class="form-row d-flex gx-3 justify-content-start">
+                                                    <div class="col-md-5 mb-3">
+                                                        <label for="validationTooltip01">Name On Card</label>
+                                                        <input type="text" class="form-control" id="validationTooltip01" placeholder="Name On Card" required>
+                                                    </div>
+                                                    <div class="col-md-5 mb-3">
+                                                        <label for="validationTooltip02">Credit Card Number</label>
+                                                        <input type="text" class="form-control" id="validationTooltip02" placeholder="Credit Card Number" required>
+                                                    </div>
+                                                </div>
+                                                <div class="form-row d-flex gx-3 justify-content-start">
+                                                    <div class="col-md-3 mb-3">
+                                                        <label for="validationTooltip03">Expiration Date</label>
+                                                        <input type="text" class="form-control" id="validationTooltip03" placeholder="Expiration Date" required>
+                                                    </div>
+                                                    <div class="col-md-3 mb-3">
+                                                        <label for="validationTooltip04">CVV</label>
+                                                        <input type="text" class="form-control" id="validationTooltip04" placeholder="CVV" required>
+                                                    </div>
+                                                </div>
+                                                <button class="btn btn-primary" type="submit">Pay $${total}</button>
+                                            </form>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    cartView.append(cartContent);
+                }
+            }
+        });
+	}
+    displayCart();
+
+    function removeFromCart(button){
+        var id = button.getAttribute('data-id');
+
+        $.ajax({
+            url: '/Payment/RemoveFromCart',
+            type: 'POST',
+            data: { gameId: id },
+            success: function (response) { 
+                displayCart();
+            }
+        });
+    }
+</script>

@@ -7,12 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\css\StyleCheckout.css" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="wwwroot\images\cod.jpg" />
     <None Include="wwwroot\images\g.png" />
     <None Include="wwwroot\images\u.png" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Session" Version="2.2.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
   </ItemGroup>
 

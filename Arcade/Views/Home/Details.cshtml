@@ -24,10 +24,11 @@
 			<p class="fs-md-1 fs-5 text-white text-wrap checkoutButtonDetails"><b>Price: @Model.game.Price</b></p>
 			<br>
 			<br>
-			<form action="/Home/Index" method="post">
+			<form id="addToCartForm">
 				<input type="hidden" name="gameId" value="@Model.game.Id" />
-				<button type="submit" class="btn btn-success fs-md-2 fs-sm-5 fs-2 bt-block px-3 checkoutButtonDetails"
-						style="border-radius: 100px; background-color: #300420;">
+				<button type="button" class="btn btn-success fs-md-2 fs-sm-5 fs-2 bt-block px-3 checkoutButtonDetails"
+						style="border-radius: 100px; background-color: #300420;"
+						onclick="addToCart()">
 					Add to Cart
 				</button>
 			</form>
@@ -51,7 +52,7 @@
 			<div class="accordion-body">
 				<div class="container" style="height: auto; width:100%;">
 
-					<form action="/Home/Details" method="post">
+					<form id="reviewForm">
 						<div class="form-group row">
 							<label for="staticEmail" class="col-sm-2 col-form-label">Email: </label>
 							<div class="col-sm-4">
@@ -80,8 +81,9 @@
 						<input type="hidden" name="customerId" value="@Model.customerId" />
 						<input type="hidden" name="id" value="@Model.game.Id" />
 
-						<button type="submit" class="btn btn-primary my-1">Submit</button>
+						<button type="button" class="btn btn-primary my-1" onclick="saveReview()">Submit</button>
 					</form>
+
 
 				</div>	
 			</div>
@@ -97,10 +99,10 @@
 		<div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
 			<div class="accordion-body" style="background-color: #0B0316 !important;">
 				
-				<div class="d-flex overflow-auto bar" style="white-space: nowrap; background-color: #0B0316; height: auto% !important; width: 100% !important;">
+				<div class="d-flex overflow-auto bar" id="reviews" style="white-space: nowrap; background-color: #0B0316; height: auto% !important; width: 100% !important;">
 					@for (int i = 0; i < Model.reviews.Count; ++i) {
-					<div class="card justify-content-center align-items-center reviewCards" style="margin-right: 15px; background-color: #FFFFFF !important;">
-							<img class="card-img-top img-fluid" src="/images/u2.png" alt="Card image cap" style="border-radius: 50%; max-width: 15%; height: auto;">
+						<div class="card justify-content-center align-items-center reviewCards" style="margin-right: 15px; background-color: #FFFFFF !important;">
+							<img class="card-img-top img-fluid" src="@Model.customers[i].ImgPath" alt="Card image cap" style="border-radius: 50%; max-width: 15%; height: auto;">
 							<h4 class="card-title">
 								@Model.customers[i].Email
 							</h4>
@@ -127,3 +129,56 @@
 
 	</div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+	function saveReview() {
+        var formData = $('#reviewForm').serialize();  
+        $.ajax({
+            url: '/Home/Details',
+            type: 'POST', 
+            data: formData,
+            success: function (review) {
+				var reviewHtml = '<div class="card justify-content-center align-items-center reviewCards" style="margin-right: 15px; background-color: #FFFFFF !important;">' +
+					'<img class="card-img-top img-fluid" src="' + review.imgPath + '" alt="Card image cap" style="border-radius: 50%; max-width: 15%; height: auto;">' +
+					'<h4 class="card-title">' + review.email + '</h4>' +
+					'<h5 class="card-title">' + review.title + '</h5>' +
+					'<div class="d-flex text-wrap">';
+
+				for (var i = 0; i < review.rating; i++) {
+					reviewHtml += '<span style="color: #ffc700; font-size: 1.3rem;">★</span>';
+				}
+				for (var i = 0; i < 5 - review.rating; i++) {
+					reviewHtml += '<span style="color: #ffc700; font-size: 1.3rem;">☆</span>';
+				}
+
+				reviewHtml += '</div>' +
+					'<p class="card-text text-wrap" style="word-wrap: break-word;">' + review.reviewText + '</p>' +
+					'</div>';
+
+				$('#reviews').append(reviewHtml);
+            },
+            error: function (xhr, status, error) {
+                console.error("Error submitting the review:", status, error);
+            }
+        });
+	}
+	
+	function addToCart() {
+		var formData = $('#addToCartForm').serialize();
+		$.ajax({
+			url: '/Home/AddGameToCart',
+			type: 'POST',
+			data: formData,
+			success: function (response) {
+				console.log("Game added to cart:", response);
+				
+			},
+			error: function (xhr, status, error) {
+				console.error("Error adding game to cart:", status, error);
+				
+			}
+		});
+	}
+
+</script>

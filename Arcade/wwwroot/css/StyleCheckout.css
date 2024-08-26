@@ -1,0 +1,118 @@
+﻿
+
+.gameCards {
+    min-width: 120px !important;
+    max-width: 120px !important;
+    min-height: 150px !important;
+    max-height: 150px !important;
+}
+
+.cartGames {
+    min-width: 180px !important;
+    max-width: 180px !important;
+    min-height: 230px !important;
+    max-height: 230px !important;
+}
+
+@media(min-width:768px) {
+    .gameCards {
+        min-width: 160px !important;
+        max-width: 160px !important;
+        min-height: 180px !important;
+        max-height: 180px !important;
+    }
+
+    .cartGames {
+        min-width: 230px !important;
+        max-width: 230px !important;
+        min-height: 250px !important;
+        max-height: 250px !important;
+    }
+}
+
+@media(min-width:992px) {
+    .gameCards {
+        min-width: 180px !important;
+        max-width: 180px !important;
+        min-height: 200px !important;
+        max-height: 200px !important;
+    }
+
+    .cartGames {
+        min-width: 250px !important;
+        max-width: 250px !important;
+        min-height: 280px !important;
+        max-height: 280px !important;
+    }
+}
+
+@media(min-width:1200px) {
+    .gameCards {
+        min-width: 200px !important;
+        max-width: 200px !important;
+        min-height: 230px !important;
+        max-height: 230px !important;
+    }
+
+    .cartGames {
+        min-width: 300px !important;
+        max-width: 300px !important;
+        min-height: 320px !important;
+        max-height: 320px !important;
+    }
+}
+
+
+.gameA {
+    text-decoration: none;
+    display: inline-block;
+    width: auto;
+    padding: 0;
+    margin: 0;
+}
+
+.detailsCont {
+    width: 100% !important;
+}
+
+
+.reviewCards {
+    max-width: 80% !important;
+    min-width: 80% !important;
+    max-height: 100% !important;
+    min-height: 100% !important;
+    border-radius: 0px;
+    background-color: #a28e94 !important;
+}
+
+.checkoutButtonDetails {
+    margin-left: 0%;
+}
+
+
+@media (min-width: 576px) {
+    .checkoutButtonDetails {
+        margin-left: 2%;
+    }
+}
+
+
+@media (min-width: 768px) {
+    .checkoutButtonDetails {
+        margin-left: 5%;
+    }
+}
+
+
+@media (min-width: 992px) {
+    .checkoutButtonDetails {
+        margin-left: 10%;
+    }
+}
+
+
+@media (min-width: 1200px) {
+    .checkoutButtonDetails {
+        margin-left: 20%;
+    }
+}

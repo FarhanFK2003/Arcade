@@ -31,7 +31,8 @@ namespace Arcade.Models.Repositories{
 				existingCustomer.Email = entity.Email;
 				existingCustomer.Password = entity.Password;
 				existingCustomer.Dob = entity.Dob;
-			}
+                existingCustomer.ImgPath = entity.ImgPath;
+            }
 		}
 
 		public void Delete(int id) {

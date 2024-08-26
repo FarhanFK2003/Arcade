@@ -8,16 +8,25 @@ namespace Arcade {
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-            string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=ArcadeDB;";
+            string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=ArcadeDB;Integrated Security=True;";
 
 			builder.Services.AddSingleton<IRepository<Game>>(sp => new GenericRepository<Game>(connectionString));
 			builder.Services.AddSingleton<IRepository<Customer>>(sp => new GenericRepository<Customer>(connectionString));
 			builder.Services.AddSingleton<IRepository<Review>>(sp => new GenericRepository<Review>(connectionString));
 
+
+			builder.Services.AddDistributedMemoryCache();
+			builder.Services.AddSession(options =>
+			{
+				options.IdleTimeout = TimeSpan.FromMinutes(30);
+				options.Cookie.HttpOnly = true;
+				options.Cookie.IsEssential = true;
+			});
 			var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
-            if (!app.Environment.IsDevelopment()) {
+
+			// Configure the HTTP request pipeline.
+			if (!app.Environment.IsDevelopment()) {
                 app.UseExceptionHandler("/Home/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
@@ -29,8 +38,8 @@ namespace Arcade {
             app.UseRouting();
 
             app.UseAuthorization();
-
-            app.MapControllerRoute(
+			app.UseSession();
+			app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Account}/{action=Index}/{id?}");
 
