@@ -1,0 +1,54 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid text-center">
+    <div class="row" style="background-color: #0B0316; min-height:500px">
+        <p class="fs-1 text-white"><b>Frequently Asked Questions</b></p>
+        <div class="col-12 d-flex justify-content-center">
+            <div class="accordion" id="faqs" style="width: 700px;">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function getFaqView() {
+        console.log("HELLO");
+        $.ajax({
+            url: '/Home/GetFaqs',
+            type: 'GET',
+            success: function (faqs) {
+                var faqPart = $('#faqs');
+                var faqContent = '';
+                for (var i = 0; i < faqs.length; ++i) {
+                    var uniqueId = 'collapse' + i;
+                    var headingId = 'heading' + i; 
+
+                    faqContent +=
+                        '<div class="accordion-item">' +
+                        '<h2 class="accordion-header" id="' + headingId + '">' +
+                        '<button style="background-color:#0B0316 !important;" class="accordion-button text-white" type="button" data-bs-toggle="collapse" data-bs-target="#' + uniqueId + '" aria-expanded="true" aria-controls="' + uniqueId + '">' +
+                        faqs[i].question +
+                        '</button>' +
+                        '</h2>' +
+                        '<div id="' + uniqueId + '" class="accordion-collapse collapse" aria-labelledby="' + headingId + '" data-bs-parent="#faqs">' +
+                        '<div class="accordion-body text-start">' +
+                        faqs[i].answer +
+                        '</div>' +
+                        '</div>' +
+                        '</div>';
+                }
+                faqPart.append(faqContent);
+            },
+            error: function (error) {
+                console.log("Error occurred: " + error);
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        getFaqView();
+    });
+</script>
