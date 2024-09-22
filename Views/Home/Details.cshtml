@@ -26,7 +26,7 @@
 			<br>
 			<form id="addToCartForm">
 				<input type="hidden" name="gameId" value="@Model.game.Id" />
-				<button type="button" class="btn btn-success fs-md-2 fs-sm-5 fs-2 bt-block px-3 checkoutButtonDetails"
+				<button type="button" id="addtocartbutton"class="btn btn-success fs-md-2 fs-sm-5 fs-2 bt-block px-3 checkoutButtonDetails"
 						style="border-radius: 100px; background-color: #300420;"
 						onclick="addToCart()">
 					Add To Cart
@@ -81,7 +81,7 @@
 						<input type="hidden" name="customerId" value="@Model.customerId" />
 						<input type="hidden" name="id" value="@Model.game.Id" />
 
-						<button type="button" class="btn btn-primary my-1" onclick="saveReview()">Submit</button>
+						<button type="button" id="ReviewButton"class="btn btn-primary my-1" onclick="saveReview()">Submit</button>
 					</form>
 
 
@@ -130,8 +130,66 @@
 	</div>
 </div>
 
+<div id="toaster" style="display: none; position: fixed; bottom: 10px; right: 10px; background: lightgreen; padding: 10px;">
+	<span id="toasterMessage"></span>
+</div>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+	document.getElementById("addtocartbutton").disabled = false;
+
+	var gameId = @Model.game.Id
+	console.log(gameId);
+	function updateAddToCartButton(){
+		$.ajax({
+				url: '/Payment/GetCart',
+				type: 'GET',
+				success: function (cart) {
+					var ok = 0;
+					for(var i = 0; i < cart.length; ++i)
+						if(cart[i].id == gameId)
+							ok = 1;
+					if(ok){
+						document.getElementById("addtocartbutton").disabled = true;
+					}
+				}
+		});
+
+		$.ajax({
+			url: '/Home/GetBoughtGamesOfCurrentUser',
+			type: 'GET',
+			success: function (games) {
+				var ok = 0;
+				for (var i = 0; i < games.length; ++i)
+					if (games[i].gameId == gameId)
+						ok = 1;
+				if (ok) {
+					document.getElementById("addtocartbutton").disabled = true;
+					document.getElementById("addtocartbutton").textContent = "In Library";
+				}
+			}
+		});
+
+	}
+	updateAddToCartButton();
+
+	const connection = new signalR.HubConnectionBuilder()
+		.withUrl("/cartHub")
+		.build();
+	connection.start().then(function () {
+		console.log("SignalR Connected.");
+	}).catch(function (err) {
+		return console.error(err.toString());
+	});
+	function showToaster(message) {
+		var toaster = document.getElementById("toaster");
+		document.getElementById("toasterMessage").innerText = message;
+		toaster.style.display = "block";
+
+		setTimeout(() => {
+			toaster.style.display = "none";
+		}, 3000);
+	}
 	function saveReview() {
         var formData = $('#reviewForm').serialize();  
         $.ajax({
@@ -163,6 +221,10 @@
             }
         });
 	}
+
+	connection.on("CartUpdated", function (message) {
+		showToaster(message);
+	});
 	
 	function addToCart() {
 		var formData = $('#addToCartForm').serialize();
@@ -172,7 +234,8 @@
 			data: formData,
 			success: function (response) {
 				console.log("Game added to cart:", response);
-				
+				connection.invoke("NotifyCartUpdated", "Cart Updated!").catch(err => console.error(err.toString()));
+				updateAddToCartButton();
 			},
 			error: function (xhr, status, error) {
 				console.error("Error adding game to cart:", status, error);

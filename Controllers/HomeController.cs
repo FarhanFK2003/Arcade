@@ -16,17 +16,19 @@ namespace Arcade.Controllers {
 		private readonly IRepository<Review> _reviewRepository;
         private readonly IRepository<UsersImage> _usersImageRepository;
         private readonly IWebHostEnvironment Environment;
+        private readonly IRepository<CustomerGame> _customerGameRepository;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IRepository<Faq> _faqRepository;
         public HomeController(IRepository<Game> gameRepository, IRepository<Customer> customerRepository, IRepository<UsersImage> usersImageRepository,
         IRepository<Review> reviewRepository, IRepository<Faq> faqRepository,
-        IWebHostEnvironment environment, UserManager<IdentityUser> userManager) {
+        IWebHostEnvironment environment, UserManager<IdentityUser> userManager, IRepository<CustomerGame> customerGameRepository) {
             _gameRepository = gameRepository;
 			_customerRepository = customerRepository;
 			_reviewRepository = reviewRepository;
             Environment = environment;
             _userManager = userManager;
             _usersImageRepository = usersImageRepository;
+            _customerGameRepository = customerGameRepository;
             _faqRepository = faqRepository;
         }
 
@@ -45,11 +47,21 @@ namespace Arcade.Controllers {
             return Json(games);
         }
 
+        [HttpGet]
+        public JsonResult GetBoughtGamesOfCurrentUser() {
+            string customerId = Request.Cookies["UserId"];
+            List<CustomerGame> customerGames = _customerGameRepository.GetAll().ToList();
+            List<CustomerGame> games = customerGames.Where(cg=> cg.CustomerId == customerId).ToList();
+            return Json(games);
+        }
+
         [HttpPost]
 		public IActionResult AddGameToCart(int gameId) {
 			var cartGameIds = HttpContext.Session.Get<List<int>>("CartGameIds") ?? new List<int>();
 			if (!cartGameIds.Contains(gameId)) 
 				cartGameIds.Add(gameId);
+            else
+				return StatusCode(409, new { success = false, message = "Game is already in the cart." });
 			HttpContext.Session.Set("CartGameIds", cartGameIds);
 			return Json(new { success = true });
 		}

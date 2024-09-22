@@ -4,6 +4,7 @@ using Arcade.Models;
 using Arcade_.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Arcade.Hubs;
 
 namespace Arcade_ {
     public class Program {
@@ -15,13 +16,14 @@ namespace Arcade_ {
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
+            builder.Services.AddSignalR();
             string con = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=ArcadeDB;Integrated Security=True;";
 
             builder.Services.AddSingleton<IRepository<Game>>(sp => new GenericRepository<Game>(con));
             builder.Services.AddSingleton<IRepository<Customer>>(sp => new GenericRepository<Customer>(con));
             builder.Services.AddSingleton<IRepository<Review>>(sp => new GenericRepository<Review>(con));
             builder.Services.AddSingleton<IRepository<UsersImage>>(sp => new GenericRepository<UsersImage>(con));
+            builder.Services.AddSingleton<IRepository<CustomerGame>>(sp => new GenericRepository<CustomerGame>(con));
             builder.Services.AddSingleton<IRepository<Faq>>(sp => new GenericRepository<Faq>(con));
 
             builder.Services.AddDistributedMemoryCache();
@@ -44,6 +46,9 @@ namespace Arcade_ {
 
 
             var app = builder.Build();
+
+            app.MapHub<CartHub>("/cartHub");
+
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment()) {

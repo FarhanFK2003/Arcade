@@ -8,9 +8,39 @@
     
 </div>
 
+<div id="toaster" style="display: none; position: fixed; bottom: 10px; right: 10px; background: lightgreen; padding: 10px;">
+	<span id="toasterMessage"></span>
+</div>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+
+
 <script>
+
+    const connection = new signalR.HubConnectionBuilder()
+		.withUrl("/cartHub")
+		.build();
+	connection.start().then(function () {
+		console.log("SignalR Connected.");
+	}).catch(function (err) {
+		return console.error(err.toString());
+	});
+
+    function showToaster(message) {
+		var toaster = document.getElementById("toaster");
+		document.getElementById("toasterMessage").innerText = message;
+		toaster.style.display = "block";
+
+		setTimeout(() => {
+			toaster.style.display = "none";
+		}, 3000);
+	}
+
+    connection.on("CartUpdated", function (message) {
+		showToaster(message);
+	});
+
 	function displayCart(){
         $.ajax({
             url: '/Payment/GetCart',
@@ -57,7 +87,7 @@
                                     <div class="accordion-body">
                                         <div class="container" style="height: auto; width:100%;">
 
-                                            <form class="needs-validation" novalidate>
+                                            <form class="needs-validation" novalidate action="/Payment/GamesBought" method="post">
                                                 <div class="form-row d-flex gx-3 justify-content-start">
                                                     <div class="col-md-5 mb-3">
                                                         <label for="validationTooltip01">Name On Card</label>
@@ -78,7 +108,7 @@
                                                         <input type="text" class="form-control" id="validationTooltip04" placeholder="CVV" required>
                                                     </div>
                                                 </div>
-                                                <button class="btn btn-primary" type="submit">Pay $${total}</button>
+                                                <button class="btn btn-primary" id="PayButton" onclick="GamesBought()" type="submit">Pay $${total}</button>
                                             </form>
 
                                         </div>
@@ -101,9 +131,11 @@
             url: '/Payment/RemoveFromCart',
             type: 'POST',
             data: { gameId: id },
-            success: function (response) { 
+            success: function (response) {
+                connection.invoke("NotifyCartUpdated", "Cart Updated!").catch(err => console.error(err.toString()));
                 displayCart();
             }
         });
     }
+
 </script>
